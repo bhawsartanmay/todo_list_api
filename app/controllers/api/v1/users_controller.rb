@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-
+before_action :find_user, only: [:show]
 	#Method For User Sign up
 	def sign_up
     @user = User.find_by(email: params[:email].try(:downcase))
@@ -20,6 +20,16 @@ class Api::V1::UsersController < ApplicationController
     @user.generate_token
     device = @user.devices.create(device_params)
     render json: @user, adapter: :json, meta: {responseStatus: true, responseCode: 200, responseMessage: "Login successfully." }, meta_key: 'response'
+	end
+
+	def show
+		user = User.find_by(access_token: request.headers[:AUTHTOKEN])
+		@user = User.find_by(id: params[:id])
+		if @user.present? && user.id == @user.id
+    	render json:{result:@user,responseStatus: true, responseCode: 200, responseMessage: "User Show Successfully!" }
+		else
+			render_message false, 402, "You Are not Authorized!"
+		end
 	end
 
 	private

@@ -9,7 +9,9 @@ Rails.application.routes.draw do
       		post :signup
       	end
       end
-
+      resources :todo_lists do
+      	resources :todo_items
+      end
     end
   end
   

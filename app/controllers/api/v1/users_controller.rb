@@ -14,11 +14,10 @@ before_action :find_user, only: [:show]
 
   #Method For User Sign in
 	def create
-		@user = User.find_by(user_name: params[:email].try(:downcase))
+		@user = User.find_by(email: params[:email].try(:downcase))
     return render_message false, 402, "Incorrect email or password." unless @user && @user.valid_password?(params[:password])
 		sign_in(@user, store: false)
     @user.generate_token
-    device = @user.devices.create(device_params)
     render json: @user, adapter: :json, meta: {responseStatus: true, responseCode: 200, responseMessage: "Login successfully." }, meta_key: 'response'
 	end
 

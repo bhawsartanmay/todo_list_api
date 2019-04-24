@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-           #generate access token for api's
+  #generate access token for api's
   def generate_token
     loop do
       self.access_token = SecureRandom.base64(30)
